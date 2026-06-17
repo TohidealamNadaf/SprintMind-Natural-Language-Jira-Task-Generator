@@ -1,19 +1,27 @@
 <div class="ticket-card">
   <div class="header">
     <span class="type-badge" [ngClass]="ticket.type.toLowerCase()">{{ ticket.type }}</span>
-    <span class="story-points" *ngIf="ticket.story_points">{{ ticket.story_points }} pts</span>
+    @if (ticket.story_points) {
+      <span class="story-points">{{ ticket.story_points }} pts</span>
+    }
   </div>
   <h3>{{ ticket.title }}</h3>
   <p class="description">{{ ticket.description }}</p>
   
-  <div class="ac-section" *ngIf="ticket.acceptance_criteria?.length">
-    <h4>Acceptance Criteria:</h4>
-    <ul>
-      <li *ngFor="let ac of ticket.acceptance_criteria">{{ ac }}</li>
-    </ul>
-  </div>
+  @if (ticket.acceptance_criteria?.length) {
+    <div class="ac-section">
+      <h4>Acceptance Criteria:</h4>
+      <ul>
+        @for (ac of ticket.acceptance_criteria; track ac) {
+          <li>{{ ac }}</li>
+        }
+      </ul>
+    </div>
+  }
   
-  <div class="parent" *ngIf="ticket.parent">
-    <strong>Parent:</strong> {{ ticket.parent }}
-  </div>
+  @if (ticket.parent) {
+    <div class="parent">
+      <strong>Parent:</strong> {{ ticket.parent }}
+    </div>
+  }
 </div>

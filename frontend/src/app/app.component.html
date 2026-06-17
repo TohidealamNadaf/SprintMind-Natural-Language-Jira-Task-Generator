@@ -11,26 +11,37 @@
       <button (click)="generateTickets()" [disabled]="loading || !brief.trim()">
         {{ loading ? 'Generating...' : 'Generate Tickets' }}
       </button>
-      <div *ngIf="message" class="message">{{ message }}</div>
+      @if (message) {
+        <div class="message">{{ message }}</div>
+      }
     </div>
 
     <div class="right-panel">
       <h2>2. Preview Tickets</h2>
-      <div class="actions" *ngIf="tickets.length > 0">
-        <button class="push-btn" (click)="pushToJira()" [disabled]="pushing">
-          {{ pushing ? 'Pushing to Jira...' : 'Push to Jira' }}
-        </button>
-      </div>
       
-      <div class="tickets-container" *ngIf="tickets.length > 0">
-        <app-ticket-card *ngFor="let ticket of tickets" [ticket]="ticket"></app-ticket-card>
-      </div>
-      <div class="empty-state" *ngIf="tickets.length === 0 && !loading">
-        No tickets generated yet.
-      </div>
-      <div class="loading-state" *ngIf="loading">
-        Analyzing brief and generating tickets via Gemini...
-      </div>
+      @if (tickets.length > 0) {
+        <div class="actions">
+          <button class="push-btn" (click)="pushToJira()" [disabled]="pushing">
+            {{ pushing ? 'Pushing to Jira...' : 'Push to Jira' }}
+          </button>
+        </div>
+        
+        <div class="tickets-container">
+          @for (ticket of tickets; track ticket.title) {
+            <app-ticket-card [ticket]="ticket"></app-ticket-card>
+          }
+        </div>
+      } @else if (!loading) {
+        <div class="empty-state">
+          No tickets generated yet.
+        </div>
+      }
+
+      @if (loading) {
+        <div class="loading-state">
+          Analyzing brief and generating tickets via Gemini...
+        </div>
+      }
     </div>
   </main>
 </div>
